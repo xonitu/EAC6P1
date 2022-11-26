@@ -1,0 +1,121 @@
+package eac6p1;
+
+import java.util.Scanner;
+import java.io.File;
+
+public class ASX_M03B2_EAC6P1_Hidalgo_S {
+
+	static Scanner teclat = new Scanner(System.in);
+	File directori = new File("C:/temp");
+	GestioFitxers gFitxers = new GestioFitxers();
+
+	public static void main(String[] args) {
+		ASX_M03B2_EAC6P1_Hidalgo_S prg = new ASX_M03B2_EAC6P1_Hidalgo_S();
+		prg.inici();
+	}
+
+	private void inici() {
+		subMenuGestioFitxers();
+	}
+
+	private void subMenuGestioFitxers() {
+		String opcio = "";
+		while (!opcio.equals("0")) {
+			teclat = new Scanner(System.in);
+			System.out.println("\nGestió fitxers");
+			System.out.println("==============");
+			System.out.println("1 Establir ruta per defecte o de treball");
+			System.out.println("2 Mostrar directori");
+			System.out.println("3 Canviar permisos d'escriptura d'un fitxer ");
+			System.out.println("4 Moure de lloc un fitxer ");
+			System.out.println("0 Tornar ");
+			System.out.print("Entra una opcio:");
+			opcio = teclat.nextLine();
+
+			switch (opcio) {
+			case "1":
+				entrarDirectoriTreball();
+				break;
+			case "2":
+				gFitxers.mostrarDirectori(directori);
+				break;
+			case "3":
+				entrarCanviPermisos(directori);
+				break;
+			case "4":
+				entrarCanviDeLloc();
+				break;
+			case "0":
+				break;
+			}
+		}
+
+	}
+
+	private void entrarDirectoriTreball() {
+		String ruta = "";
+		try {
+			System.out.println("Entra la ruta per defecte: ");
+			ruta = teclat.nextLine();
+			directori = new File(ruta);
+			if (!directori.exists()) {
+				System.out.println("Aquest directori no existeix");
+			}
+		} catch (Exception e) {
+			System.out.println("S'ha produït l'error: " + e.getMessage());
+		}
+	}
+
+	private void entrarCanviPermisos(File directori) {
+			
+		System.out.println("1: donar permisos");
+		System.out.println("2: treure permisos");
+		
+		int eleccio = teclat.nextInt();
+
+		File f = new File(directori.getPath());
+
+		// comproba existencia arxiu
+		boolean exists = f.exists();
+		
+		if (exists == true && eleccio == 1) {
+			f.setWritable(true);
+			System.out.println("Permissos escriptura concedits.");
+			System.out.println("Writable: " + f.canWrite());
+		}
+		if (exists == true && eleccio == 2) {
+
+			f.setWritable(false);
+			System.out.println("Permissos escriptura revocats.");
+			System.out.println("Writable: " + f.canWrite());
+
+		} if (!exists) {
+			System.out.println("No es troba l'arxiu.");
+		}
+	}
+
+	private void entrarCanviDeLloc() {
+		String desti = "";
+		String arxiu = "";
+		System.out.println("El directori actual es " + directori.getPath());
+		System.out.println("Entra el nom del fitxer: ");
+		arxiu = teclat.nextLine();
+		System.out.println("Entra el nou directori: ");
+		desti = teclat.nextLine();
+		File nouDirectori = new File(desti);
+		System.out.println("Es correcte (s/n)");
+		if (teclat.nextLine().equalsIgnoreCase("S")) {
+			if (!nouDirectori.exists()) {
+				System.out.print("Aquest directori no existeix, el vols crear? (s/n) ");
+				if (teclat.nextLine().equalsIgnoreCase("S")) {
+					if (nouDirectori.mkdir()) {
+						gFitxers.canviLlocArxiu(directori, nouDirectori, arxiu);
+					} else {
+						System.out.println("El directori no s'ha creat");
+					}
+
+				}
+			}
+		}
+	}
+}

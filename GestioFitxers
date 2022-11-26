@@ -1,0 +1,51 @@
+package eac6p1;
+
+import java.io.File;
+
+public class GestioFitxers {
+
+    public void mostrarDirectori(File directori) {
+        try {
+            if (!directori.exists()) {
+                System.out.println("Directori inexistent o no establert.");
+                return;
+            }
+            File[] files = directori.listFiles();
+            if (files.length == 0) {
+                System.out.println("No hi ha arxius al directori");
+            } else {
+                System.out.println("Arxius al directori " + directori);
+                for (int i = 0; i < files.length; i++) {
+                    File f = files[i];
+                    if (f.isDirectory()) {
+                        System.out.print("[DIR]");
+                    } else {
+                        System.out.print("[ARX]");
+                    }
+                    System.out.println(f.getName());
+                }
+            }
+            if (!directori.exists()) {
+                System.out.println("Directori inexistent");
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+
+    public void canviLlocArxiu(File directoriOrigen, File directoriDesti, String nomArxiu) {
+        try {
+            File nomOrigen = new File(directoriOrigen + File.separator + nomArxiu);
+            File nomDesti = new File(directoriDesti + File.separator + nomArxiu);
+            nomOrigen.renameTo(nomDesti);
+        } catch (Exception e) {
+            System.out.println("S'ha produït l'error: " + e.getMessage());
+        }
+    }
+
+}
+
+
+
+
